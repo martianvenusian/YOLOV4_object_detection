@@ -246,6 +246,8 @@ $ python
 
 ## Darknet (YOLO)
 
+Go to the darnet link for more information: https://github.com/AlexeyAB/darknet
+
 ### 1. Installing The Base System
 
 First clone the Darknet git repository
