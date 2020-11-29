@@ -242,3 +242,39 @@ $ python
 ```
 
 ## Darknet (YOLO)
+
+### 1. Installing The Base System
+
+First clone the Darknet git repository
+
+```
+$ git clone git@github.com:AlexeyAB/darknet.git
+$ cd darknet
+$ make
+```
+
+If you have any errors, try to fix them?
+
+If everything seems to have compiled correctly, try running it!
+
+### 2. Compiling With CUDA
+
+Open and change the first line of the "Makefile" in the base directory
+
+```
+GPU=1
+CUDNN=1
+CUDNN_HALF=1
+OPENCV=1
+AVX=0
+OPENMP=1
+LIBSO=1
+ZED_CAMERA=0
+ZED_CAMERA_v2_8=0
+```
+
+Now you can make the project and CUDA will be enabled.
+
+```
+$ make
+```
