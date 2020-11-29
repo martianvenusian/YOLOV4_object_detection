@@ -2,13 +2,16 @@
 
 These guidelines are about how to install deep learning dependencies and train Yolo modules on Ubuntu 18.04.
 
-## Dependencies
+## Requirements
 
 - Ubuntu
+- CMake >= 3.12: https://cmake.org/download/
 - NVIDIA GPUs
 - NVIDIA graphic driver
-- CUDA toolkit
-- cuDNN library
+- CUDA toolkit (v10.0.x)
+- cuDNN library (v7.4.x)
+- OpenCV >= 2.4
+- TensorFlow 2.0
 
 ### 1. Install Ubuntu dependencies
 
@@ -277,4 +280,19 @@ Now you can make the project and CUDA will be enabled.
 
 ```
 $ make
+```
+
+### 3. Test Yolo
+
+You will have to download the pre-trained weight file (237 MB). Just run this:
+
+```
+wget https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.weights
+```
+
+Then run the detector!
+
+```
+./darknet detector test ./cfg/coco.data ./cfg/yolov4.cfg ./yolov4.weights -ext_output data/dog.jpg
+
 ```
