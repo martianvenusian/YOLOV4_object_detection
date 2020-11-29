@@ -4,8 +4,12 @@ These guidelines are about how to install deep learning dependencies and train Y
 
 ## Requirements
 
+<<<<<<< HEAD
 - Ubuntu
 - CMake >= 3.12: https://cmake.org/download/
+=======
+- Ubuntu 18.04
+>>>>>>> 91834e49809f18229f7fb0c6707adbdea121e9f3
 - NVIDIA GPUs
 - NVIDIA graphic driver
 - CUDA toolkit (v10.0.x)
