@@ -4,7 +4,7 @@ These guidelines are about how to install deep learning dependencies and train Y
 
 ## Dependencies
 
-- Ubuntu
+- Ubuntu 18.04
 - NVIDIA GPUs
 - NVIDIA graphic driver
 - CUDA toolkit
