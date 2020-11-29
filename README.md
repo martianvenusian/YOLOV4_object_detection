@@ -1,32 +1,413 @@
-![Darknet Logo](http://pjreddie.com/media/files/darknet-black-small.png)
+# YOLOv4 object detection
 
-# Darknet #
-Darknet is an open source neural network framework written in C and CUDA. It is fast, easy to install, and supports CPU and GPU computation.
+## Dependencies
 
-**Discord** invite link for for communication and questions: https://discord.gg/zSq8rtW
+- Ubuntu
+- NVIDIA GPUs
+- NVIDIA graphic driver
+- CUDA toolkit
+- cuDNN library
+- Yolov4
 
-## YOLOv4:
+## Getting started
 
-* **paper:** https://arxiv.org/abs/2004.10934
+These guidelines are about how to install Yolov4 module in Ubuntu 16.04. and Ubuntu 18.04.
 
-* **source code:** https://github.com/AlexeyAB/darknet
+### Ubuntu 18.04
 
-* **Wiki:** https://github.com/AlexeyAB/darknet/wiki
+1.  Install Ubuntu dependencies
 
-* **useful links:** https://medium.com/@alexeyab84/yolov4-the-most-accurate-real-time-neural-network-on-ms-coco-dataset-73adfd3602fe?source=friends_link&sk=6039748846bbcf1d960c3061542591d7
+```
+$ sudo apt-get update
+$ sudo apt-get upgrade
+```
 
-For more information see the [Darknet project website](http://pjreddie.com/darknet).
+Let’s install development tools, image and video I/O libraries, GUI packages, optimization libraries, and other packages:
 
-For questions or issues please use the [Google Group](https://groups.google.com/forum/#!forum/darknet).
+```
+$ sudo apt-get install build-essential cmake unzip pkg-config
+$ sudo apt-get install libxmu-dev libxi-dev libglu1-mesa libglu1-mesa-dev
+$ sudo apt-get install libjpeg-dev libpng-dev libtiff-dev
+$ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
+$ sudo apt-get install libxvidcore-dev libx264-dev
+$ sudo apt-get install libgtk-3-dev
+$ sudo apt-get install libopenblas-dev libatlas-base-dev liblapack-dev gfortran
+$ sudo apt-get install libhdf5-serial-dev
+$ sudo apt-get install python3-dev python3-tk python-imaging-tk
+```
 
+CUDA 10 requires gcc v7 but Ubuntu 18.04 ships with gcc v7. If gcc v7 is not installed then need to install gcc and g++ v7:
 
-![YOLOv4Tiny](https://user-images.githubusercontent.com/4096485/85734112-6e366700-b705-11ea-95d1-fcba0de76d72.png)
+```
+$ sudo apt-get install gcc-7 g++-7
+```
 
-----
+2. Install latest NVIDIA drivers (GPU only)
+   This section differs quite a bit from installing on Ubuntu 16.04
+   Let’s go ahead and add the NVIDIA PPA repository to Ubuntu’s Aptitude package manager:
 
-![YOLOv4](https://user-images.githubusercontent.com/4096485/90338826-06114c80-dff5-11ea-9ba2-8eb63a7409b3.png)
+```
+$ sudo add-apt-repository ppa:graphics-drivers/ppa
+$ sudo apt-get update
+```
 
+Now we can very conveniently install our NVIDIA drivers
+$ sudo apt install nvidia-driver-xxx
 
-----
+Go ahead and reboot so that the drivers will be activated as your machine starts:
 
-![OpenCV_TRT](https://user-images.githubusercontent.com/4096485/90338805-e5e18d80-dff4-11ea-8a68-5710956256ff.png)
+```
+$ sudo reboot now
+```
+
+You’ll want to verify that NVIDIA drivers have been successfully installed:
+
+```
+$ nvidia-smi
+```
+
+3. Install CUDA Toolkit and cuDNN (GPU only)
+   Head to the NVIDIA developer website for CUDA 10.0 downloads.
+   You can access the downloads via this direct link: https://developer.nvidia.com/cuda-10.0-download-archive
+
+Make the following selections from the CUDA Toolkit download page:
+“Linux”
+“x86_64”
+“Ubuntu”
+“18.04”
+“runfile (local)”
+“Base Installer”
+
+Click right button of your mouse on "Download" and choose "Copy link"
+and use the wget command to download the runfile (be sure to copy the full URL):
+
+```
+$ wget https://developer.nvidia.com/compute/cuda/10.0/Prod/local_installers/cuda_10.0.130_410.48_linux
+```
+
+From there install let’s go ahead and install the CUDA Toolkit.
+
+```
+$ chmod +x cuda_10.0.130_410.48_linux.run
+$ sudo ./cuda_10.0.130_410.48_linux.run --override
+```
+
+During installation, you will have to:
+Use “space” to scroll down and accept terms and conditions
+Select y for “Install on an unsupported configuration”
+Select n for “Install NVIDIA Accelerated Graphics Driver for Linux-x86_64 384.81?”
+Keep all other default values (some are y and some are n ). For paths, just press “enter”.
+
+Now we need to update our ~/.bashrc file to include the CUDA Toolkit:
+
+```
+$ nano ~/.bashrc
+```
+
+Scroll to the bottom and add following lines:
+
+```
+# NVIDIA CUDA Toolkit
+export PATH=/usr/local/cuda-10.0/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/cuda-10.0/lib64
+```
+
+To save and exit with nano, simply press “ctrl + o”, then “enter”, and finally “ctrl + x”.
+Once you’ve saved and closed your bash profile, go ahead and reload the file:
+
+```
+$ source ~/.bashrc
+```
+
+From there you can confirm that the CUDA Toolkit has been successfully installed:
+
+```
+$ nvcc -V
+```
+
+4. Install cuDNN (CUDA Deep Learning Neural Network library) (GPU only)
+   For this step, you will need to create an account on the NVIDIA website + download cuDNN.
+   Here’s the link: https://developer.nvidia.com/cudnn
+
+When you’re logged in and on that page, go ahead and make the following selections:
+
+“Download cuDNN”
+Login and check “I agree to the terms of service fo the cuDNN Software License Agreement”
+“Archived cuDNN Releases”
+“cuDNN v7.4.1 for CUDA 10.0”
+“cuDNN Library for Linux”
+
+The following commands will install cuDNN in the proper locations on your Ubuntu 18.04 system:
+
+```
+$ cd ~
+$ tar -zxf cudnn-10.0-linux-x64-v7.4.1.x.tgz
+$ cd cuda
+$ sudo cp -P lib64/* /usr/local/cuda/lib64/
+$ sudo cp -P include/* /usr/local/cuda/include/
+$ cd ~
+```
+
+Above, we have:
+
+Extracted the cuDNN 10.0 v7.4.1.x file in our home directory.
+Navigated into the cuda/ directory.
+Copied the lib64/ directory and all of its contents to the path shown.
+Copied the include/ folder as well to the path shown.
+Take care with these commands as they can be a pain point later if cuDNN isn’t where it needs to be.
+
+5. Configure Python virtual environment
+
+First, let’s install pip, a Python package management tool:
+
+```
+$ wget https://bootstrap.pypa.io/get-pip.py
+$ sudo python3 get-pip.py
+```
+
+Now that pip is installed, let’s go ahead and install the two virtual environment tools that I recommend — virtualenv and virtualenvwrapper:
+
+```
+$ python3 -m pip install virtualenv virtualenvwrapper
+```
+
+We’ll need to update our bash profile with some virtualenvwrapper settings to make the tools work together.
+Go ahead and open your ~/.bashrc file using your preferred text editor again and add the following lines at the very bottom:
+
+```
+# virtualenv and virtualenvwrapper
+export WORKON_HOME=$HOME/.virtualenvs
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+source /usr/local/bin/virtualenvwrapper.sh
+```
+
+And let’s go ahead and reload our ~/.bashrc file:
+
+```
+$ source ~/.bashrc
+```
+
+The virtualenvwrapper tool now has support for the following terminal commands:
+
+mkvirtualenv : Creates a virtual environment.
+rmvirtualenv : Removes a virtual environment.
+workon : Activates a specified virtual environment. If an environment isn’t specified all environments will be listed.
+deactivate : Takes you to your system environment. You can activate any of your virtual environments again at any time
+
+Creating the my_environment_name environment
+
+```
+$mkvirtualenv my_environment_name -p python3
+```
+
+If your environment is not active, simply use the workon command:
+
+```
+$ workon my_environment_name
+```
+
+6. Install Python libraries
+   Now that our Python virtual environment is created and is currently active, let’s install NumPy and OpenCV using pip:
+
+```
+$ pip install numpy
+$ pip install opencv-contrib-python
+```
+
+Let’s install libraries required for additional computer vision, image processing, and machine learning as well:
+
+```
+$ pip install scipy matplotlib pillow
+$ pip install imutils h5py requests progressbar2
+$ pip install scikit-learn scikit-image
+```
+
+7. Install TensorFlow for Deep Learning for Computer Vision with Python
+
+```
+$pip install tensorflow-2.0.0
+```
+
+Go ahead and verify that TensorFlow is installed in your my_environment_name virtual environment:
+
+```
+$ python
+>>> import tensorflow
+>>>
+```
+
+### Ubuntu 20.04
+
+If you want more information, please visit the [original article](https://medium.com/@sb.jaduniv/how-to-install-opencv-4-2-0-with-cuda-10-1-on-ubuntu-20-04-lts-focal-fossa-bdc034109df3). You can skip any unnecessary steps if you need.
+
+1. Install NVIDIA graphic driver, CUDA toolkit, cuBLAS, and cuDNN
+
+2. Install prerequisites for OpenCV with DNN module
+
+Generic tools
+
+```
+sudo apt install build-essential cmake pkg-config unzip yasm git checkinstall
+```
+
+Image I/O libs
+
+```
+$ sudo apt install libjpeg-dev libpng-dev libtiff-dev
+```
+
+Video/Audio Libs — FFMPEG, GSTREAMER, x264 and so on
+
+```
+$ sudo apt install libavcodec-dev libavformat-dev libswscale-dev libavresample-dev
+$ sudo apt install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+$ sudo apt install libxvidcore-dev x264 libx264-dev libfaac-dev libmp3lame-dev libtheora-dev
+$ sudo apt install libfaac-dev libmp3lame-dev libvorbis-dev
+```
+
+OpenCore — Adaptive Multi Rate Narrow Band (AMRNB) and Wide Band (AMRWB) speech codec
+
+```
+$ sudo apt install libopencore-amrnb-dev libopencore-amrwb-dev
+```
+
+Cameras programming interface libs
+
+```
+$ sudo apt-get install libdc1394-22 libdc1394-22-dev libxine2-dev libv4l-dev v4l-utils
+$ cd /usr/include/linux
+$ sudo ln -s -f ../libv4l1-videodev.h videodev.h
+$ cd ~
+```
+
+GTK lib for the graphical user functionalites coming from OpenCV highghui module
+
+```
+$ sudo apt install libgtk-3-dev
+```
+
+Python3
+
+```
+$ sudo apt install python3-dev python3-pip python3-testresources
+```
+
+Parallelism library C++ for CPU
+
+```
+$ sudo apt-get install libtbb-dev
+```
+
+Optimization libraries for OpenCV
+
+```
+$ sudo apt-get install libatlas-base-dev gfortran
+```
+
+Optional libraries
+
+```
+$ sudo apt install libprotobuf-dev protobuf-compiler
+$ sudo apt install libgoogle-glog-dev libgflags-dev
+$ sudo apt install libgphoto2-dev libeigen3-dev libhdf5-dev
+```
+
+3. Download OpenCV source code
+
+Same as in Ubuntu 18.04 LTS
+
+4. Configure Python virtual environment
+
+Same as in Ubuntu 18.04 LTS
+
+5. Figure out compute capability of your GPU
+
+Same as in Ubuntu 18.04 LTS
+
+6. Configure CMake for OpenCV with NVIDIA GPU support
+
+```
+$ cd ~/opencv
+$ mkdir build && cd build
+$ cmake \
+  -D CMAKE_BUILD_TYPE=RELEASE \
+  -D CMAKE_C_COMPILER=/usr/bin/gcc-8 \
+  -D CMAKE_INSTALL_PREFIX=/usr/local \
+  -D INSTALL_PYTHON_EXAMPLES=OFF \
+  -D INSTALL_C_EXAMPLES=OFF \
+  -D BUILD_opencv_cudacodec=OFF \
+  -D OPENCV_ENABLE_NONFREE=ON \
+  -D WITH_CUDA=ON \
+  -D WITH_CUBLAS=1 \
+  -D WITH_CUDNN=ON \
+  -D WITH_TBB=ON \
+  -D WITH_V4L=ON \
+  -D OPENCV_DNN_CUDA=ON \
+  -D OPENCV_GENERATE_PKGCONFIG=ON \
+  -D OPENCV_PC_FILE_NAME=opencv.pc \
+  -D WITH_QT=OFF \
+  -D WITH_OPENGL=ON \
+  -D WITH_GSTREAMER=ON \
+  -D ENABLE_FAST_MATH=1 \
+  -D CUDA_FAST_MATH=1 \
+  -D CUDA_ARCH_BIN=7.5 \
+  -D OPENCV_PYTHON3_INSTALL_PATH=~/.virtualenvs/opencv_gpu/lib/python3.8/site-packages \
+  -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
+  -D HAVE_opencv_python3=ON \
+  -D PYTHON_EXECUTABLE=~/.virtualenvs/opencv_gpu/bin/python \
+  -D BUILD_EXAMPLES=OFF ..
+```
+
+7. Build and install OpenCV with DNN module
+
+Same as in Ubuntu 18.04 LTS
+
+## Troubleshooting
+
+For "unsupported GNU version! gcc versions later than 8 are not supported!" error, please refer [this article](https://linuxconfig.org/how-to-switch-between-multiple-gcc-and-g-compiler-versions-on-ubuntu-20-04-lts-focal-fossa).
+
+## Running the program
+
+### Using CPU
+
+```
+python detection.py --image_path img
+```
+
+### Using GPUs
+
+```
+python rn-detection.py --image_path img --use_gpu
+```
+
+### More options
+
+```
+python detection.py --image_path img --save_image --show_image --use_gpu
+```
+
+2. Install prerequisites for OpenCV with DNN module
+
+```
+$ sudo apt update
+$ sudo apt upgrade
+$ sudo apt install build-essential cmake unzip pkg-config
+$ sudo apt install libjpeg-dev libpng-dev libtiff-dev
+$ sudo apt install libavcodec-dev libavformat-dev libswscale-dev libavresample-dev
+$ sudo apt install libv4l-dev libxvidcore-dev libx264-dev
+$ sudo apt install libgtk-3-dev
+$ sudo apt install libatlas-base-dev gfortran
+$ sudo apt install python3-dev
+```
+
+3. Download OpenCV source code
+
+```
+$ cd ~
+$ wget -O opencv.zip https://github.com/opencv/opencv/archive/4.2.0.zip
+$ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.2.0.zip
+$ unzip opencv.zip
+$ unzip opencv_contrib.zip
+$ mv opencv-4.2.0 opencv
+$ mv opencv_contrib-4.2.0 opencv_contrib
+```
