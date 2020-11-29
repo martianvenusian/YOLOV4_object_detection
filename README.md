@@ -1,5 +1,7 @@
 # YOLOv4 object detection
 
+These guidelines are about how to install deep learning dependencies and train Yolo modules on Ubuntu 18.04.
+
 ## Dependencies
 
 - Ubuntu
@@ -7,11 +9,6 @@
 - NVIDIA graphic driver
 - CUDA toolkit
 - cuDNN library
-- darknet (yolo)
-
-## Getting started
-
-These guidelines are about how to install deep learning dependencies and train Yolo modules on Ubuntu 18.04.
 
 ### 1. Install Ubuntu dependencies
 
@@ -243,3 +240,5 @@ $ python
 >>> import tensorflow
 >>>
 ```
+
+## Darknet (YOLO)
