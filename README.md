@@ -8,8 +8,8 @@ These guidelines are about how to install deep learning dependencies and train Y
 - CMake >= 3.12: https://cmake.org/download/
 - NVIDIA GPUs
 - NVIDIA graphic driver
-- CUDA toolkit (v10.0.x)
-- cuDNN library (v7.4.x)
+- CUDA toolkit >= v10.0
+- cuDNN library >= v7.0
 - OpenCV >= 2.4
 - TensorFlow 2.0
 
@@ -201,16 +201,16 @@ The virtualenvwrapper tool now has support for the following terminal commands:
 - workon : Activates a specified virtual environment. If an environment isn’t specified all environments will be listed.
 - deactivate : Takes you to your system environment. You can activate any of your virtual environments again at any time
 
-Creating the my_environment_name environment
+Creating the yolo_object_detection environment
 
 ```
-$mkvirtualenv my_environment_name -p python3
+$mkvirtualenv yolo_object_detection -p python3
 ```
 
 If your environment is not active, simply use the workon command:
 
 ```
-$ workon my_environment_name
+$ workon yolo_object_detection
 ```
 
 ### 6. Install Python libraries
@@ -236,7 +236,7 @@ $ pip install scikit-learn scikit-image
 $pip install tensorflow-2.0.0
 ```
 
-Go ahead and verify that TensorFlow is installed in your my_environment_name virtual environment:
+Go ahead and verify that TensorFlow is installed in your yolo_object_detection virtual environment:
 
 ```
 $ python
@@ -298,3 +298,11 @@ Then run the detector!
 ./darknet detector test ./cfg/coco.data ./cfg/yolov4.cfg ./yolov4.weights -ext_output data/dog.jpg
 
 ```
+
+### 4. Training YOLO on VOC Dataset
+Prepare your dataset like VOC dataset style like below:
+--- Annotation
+--- JPEGImages
+--- labels
+--- train.txt
+--- test.txt
