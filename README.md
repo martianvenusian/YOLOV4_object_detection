@@ -299,10 +299,80 @@ Then run the detector!
 
 ```
 
-### 4. Training YOLO on VOC Dataset
-Prepare your dataset like VOC dataset style like below:
---- Annotation
---- JPEGImages
---- labels
---- train.txt
---- test.txt
+### 4. Prepare your dataset 
+Prepare your dataset like Pascal VOC style like. Check for more information http://host.robots.ox.ac.uk/pascal/VOC/voc2012/index.html 
+DATASET
+└── Annotations
+    ├── image01.xml    
+    └── image02.xml    
+└── JPEGImages
+    ├── image01.jpg    
+    └── image02.jpg
+└── labels    
+    ├── image01.txt 
+    └── image02.txt
+└── train.txt
+└── test.txt  
+
+
+Example for labels/image01.txt:
+```
+1 0.716797 0.395833 0.216406 0.147222
+0 0.687109 0.379167 0.255469 0.158333
+1 0.420312 0.395833 0.140625 0.166667
+```
+Where:
+<object-class> <x_center> <y_center> <width> <height>
+<object-class> - integer object number from 0 to (classes number)
+<x_center> <y_center> <width> <height> - float values relative to width and height of image, it can be equal from (0.0 to 1.0]
+atention: <x_center> <y_center> - are center of rectangle (are not top-left corner)
+
+
+### 5. Modify Cfg for Pascal VOC Data
+1. Go to cfg folder and modify voc.data file
+```
+classes= 20 # class number 
+train  = <path-to-dataset>/train.txt
+valid  = <path-to-dataset>test.txt
+names = data/voc.names
+backup = backup
+  ```
+2. Go to cfg folder and modify yolov4.cfg file
+```
+batch=64 # if CUDA Error: out of memory then make it lower
+subdivisions=32 # if CUDA Error: out of memory try to modify it
+classes=20 # class number 
+filters=75 # (class number + 5) * 3
+```
+
+3. Go to data directory and modify voc.names file.
+Change each line with your objects names.
+```
+aeroplane 
+bicycle
+bird
+boat
+bottle
+bus
+car
+cat
+chair
+cow
+diningtable
+dog
+horse
+motorbike
+person
+pottedplant
+sheep
+sofa
+train
+tvmonitor
+```
+
+
+### 6. Train The Model
+1. Download pretrained convolutional weights  https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.conv.137
+
+2. Train the model
+./darknet detector train cfg/voc.data cfg/yolov4.cfg yolov4.conv.137
