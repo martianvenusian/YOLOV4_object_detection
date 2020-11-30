@@ -289,13 +289,13 @@ $ make
 You will have to download the pre-trained weight file (237 MB). Just run this:
 
 ```
-wget https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.weights
+$ wget https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.weights
 ```
 
 Then run the detector!
 
 ```
-./darknet detector test ./cfg/coco.data ./cfg/yolov4.cfg ./yolov4.weights -ext_output data/dog.jpg
+$ ./darknet detector test ./cfg/coco.data ./cfg/yolov4.cfg ./yolov4.weights -ext_output data/dog.jpg
 
 ```
 
@@ -378,5 +378,5 @@ tvmonitor
 
 2. Train the model
 ```
-./darknet detector train cfg/voc.data cfg/yolov4.cfg yolov4.conv.137
+$ ./darknet detector train cfg/voc.data cfg/yolov4.cfg yolov4.conv.137
 ```
