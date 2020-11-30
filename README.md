@@ -314,7 +314,7 @@ DATASET
     ├── image01.txt
     └── image02.txt
 └── train.txt
-└── test.txt  
+└── val.txt  
 ```
 
 Example for labels/image01.txt:
@@ -335,14 +335,17 @@ Where:
 ```
 classes= 20 # class number 
 train  = <path-to-dataset>/train.txt
-valid  = <path-to-dataset>test.txt
+valid  = <path-to-dataset>/val.txt
 names = data/voc.names
 backup = backup
   ```
 2. Go to cfg folder and modify yolov4.cfg file
 ```
 batch=64 # if CUDA Error: out of memory then make it lower
-subdivisions=32 # if CUDA Error: out of memory try to modify it
+subdivisions=16 # if CUDA Error: out of memory try to modify it
+width=416 # image size
+height=416 # image size
+...
 classes=20 # class number 
 filters=75 # (class number + 5) * 3
 ```
