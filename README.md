@@ -324,10 +324,10 @@ Example for labels/image01.txt:
 1 0.420312 0.395833 0.140625 0.166667
 ```
 Where:
-- <object-class> <x_center> <y_center> <width> <height>
-- <object-class> - integer object number from 0 to (classes number)
-- <x_center> <y_center> <width> <height> - float values relative to width and height of image, it can be equal from (0.0 to 1.0]
-- atention: <x_center> <y_center> - are center of rectangle (are not top-left corner)
+- object-class x_center y_center width height
+- object-class - integer object number from 0 to (classes number)
+- x_center y_center width height - float values relative to width and height of image, it can be equal from (0.0 to 1.0]
+- atention: x_center y_center - are center of rectangle (are not top-left corner)
 
 
 ### 5. Modify Cfg for Pascal VOC Data
