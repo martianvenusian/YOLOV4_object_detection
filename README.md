@@ -301,15 +301,17 @@ Then run the detector!
 
 ### 4. Prepare your dataset 
 Prepare your dataset like Pascal VOC style like. Check for more information http://host.robots.ox.ac.uk/pascal/VOC/voc2012/index.html 
+
 DATASET
 └── Annotations
+
     ├── image01.xml    
     └── image02.xml    
 └── JPEGImages
     ├── image01.jpg    
     └── image02.jpg
-└── labels    
-    ├── image01.txt 
+└── labels
+    ├── image01.txt
     └── image02.txt
 └── train.txt
 └── test.txt  
