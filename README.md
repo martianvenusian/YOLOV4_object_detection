@@ -377,4 +377,6 @@ tvmonitor
 1. Download pretrained convolutional weights  https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.conv.137
 
 2. Train the model
+```
 ./darknet detector train cfg/voc.data cfg/yolov4.cfg yolov4.conv.137
+```
