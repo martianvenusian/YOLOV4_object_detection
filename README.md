@@ -233,7 +233,7 @@ $ pip install scikit-learn scikit-image
 ### 7. Install TensorFlow for Deep Learning for Computer Vision with Python
 
 ```
-$pip install tensorflow-2.0.0
+$pip install tensorflow==2.0.0
 ```
 
 Go ahead and verify that TensorFlow is installed in your yolo_object_detection virtual environment:
